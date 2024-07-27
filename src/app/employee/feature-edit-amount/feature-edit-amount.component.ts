@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { EditAmountFacade } from '../data-access/edit-amount.facade';
 import { FormArray, FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators, ValueChangeEvent } from '@angular/forms';
 import { CommonModule } from '@angular/common';
