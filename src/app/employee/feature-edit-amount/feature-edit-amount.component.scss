@@ -1,0 +1,56 @@
+:host{
+    margin-top: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+button{
+    align-self: flex-start;
+}
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 16px
+}
+.row{
+    display: flex;
+    gap: 6px;
+    &.ng-invalid.ng-dirty {
+        .label-input-wrapper:not(:focus-within){
+            .search-label{
+                color: red;
+            }
+            .search-input{
+                border: 1px solid red;
+            }
+        }
+    }
+}
+.label-input-wrapper{
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    gap: 4px;
+    &:focus-within{
+        .overlay{
+            display: block;
+        }
+    }
+}
+.overlay{
+    display: none;
+    position: absolute;
+    bottom: -10px;
+    transform: translateY(100%);
+    z-index: 2;
+}
+.error-message{
+    color: red;
+    margin-top: -10px;
+    font-weight: bold;
+}

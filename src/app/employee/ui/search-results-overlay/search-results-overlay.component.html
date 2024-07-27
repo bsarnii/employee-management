@@ -1,0 +1,11 @@
+@for(result of results; track result.id){
+    <button 
+        tabindex="0" 
+        (click)="onSelect(result)" 
+        class="result"
+    >
+        <p>{{result.name}}</p>
+        <p>{{result.id}}</p>
+    </button>
+}
+<button (click)="onAddEmployeeBtnClick()">Add employee</button>

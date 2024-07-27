@@ -1,0 +1,53 @@
+<div class="wrapper">
+    <button (click)="addRow()" class="button-add">+ Add Row</button>
+    <form [formGroup]="form">
+        @for(row of form.controls['employees'].controls;let i = $index; track i){
+            <div class="row" [formGroup]="row">
+                <div class="label-input-wrapper">
+                    <label class="search-label" for="employee_search">Search</label>
+                    <input
+                        formControlName="search"
+                        autocomplete="off"
+                        [value]="row.controls['search'].value"
+                        (click)="overlay.results = filterResults($event)"
+                        (keyup)="overlay.results = filterResults($event)"
+                        class="search-input" 
+                        id="employee_search" 
+                        type="text" 
+                        placeholder="Employee name or id">
+                    <app-search-results-overlay
+                        #overlay
+                        (employeeSelected)="onEmployeeSelect($event, i)" 
+                        class="overlay" 
+                    />
+                </div>
+
+                <div class="label-input-wrapper">
+                    <label for="name">Employee Name</label>
+                    <input readonly [value]="row.controls['employee_name'].value" type="text" id="name" placeholder="Auto filled on selection">
+                </div>
+
+                <div class="label-input-wrapper">
+                    <label for="id">Employee Id</label>
+                    <input readonly [value]="row.controls['employee_id'].value" type="text" id="id" placeholder="Auto filled on selection">
+                </div>
+
+                <div class="label-input-wrapper">
+                    <label for="type_a_amount">Type A amount</label>
+                    <input formControlName="TypeA_Amount" min="0" type="number" id="type_a_amount">
+                </div>
+
+                <div class="label-input-wrapper">
+                    <label for="type_b_amount">Type B amount</label>
+                    <input formControlName="TypeB_Amount" min="0" type="number" id="type_b_amount">
+                </div>
+            </div>
+            @if(row.invalid && row.dirty){
+                <p class="error-message">Employee not selected!</p>
+            }
+        }
+        @if(formArray.controls.length > 0){
+            <button (click)="submit()" type="submit">Submit</button>
+        }
+    </form>
+</div>
