@@ -17,25 +17,33 @@ form{
     flex-direction: column;
     gap: 16px
 }
-.row{
-    display: flex;
-    gap: 6px;
-    &.ng-invalid.ng-dirty {
-        .label-input-wrapper:not(:focus-within){
-            .search-label{
-                color: red;
-            }
-            .search-input{
-                border: 1px solid red;
-            }
+table{
+    text-align: left;
+    thead{
+        background: #5b9bd5;
+        color: #fff;
+        th{
+            padding: 4px;
+        }
+    }
+    tr{
+        background: #d2deef;
+        &.odd{
+            background: #eaeff7;
+        }
+        td{
+            padding: 4px;
         }
     }
 }
-.label-input-wrapper{
-    display: flex;
+
+input{
+    background: transparent;
+    border: none;
+}
+
+.input-overlay-wrapper{
     position: relative;
-    flex-direction: column;
-    gap: 4px;
     &:focus-within{
         .overlay{
             display: block;
@@ -48,9 +56,4 @@ form{
     bottom: -10px;
     transform: translateY(100%);
     z-index: 2;
-}
-.error-message{
-    color: red;
-    margin-top: -10px;
-    font-weight: bold;
 }

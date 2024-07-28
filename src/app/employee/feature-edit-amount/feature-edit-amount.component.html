@@ -1,53 +1,52 @@
 <div class="wrapper">
     <button (click)="addRow()" class="button-add">+ Add Row</button>
-    <form [formGroup]="form">
-        @for(row of form.controls['employees'].controls;let i = $index; track i){
-            <div class="row" [formGroup]="row">
-                <div class="label-input-wrapper">
-                    <label class="search-label" [for]="'employee_search'+i">Search</label>
-                    <input
-                        formControlName="search"
-                        autocomplete="off"
-                        [value]="row.controls['search'].value"
-                        (click)="overlay.results = filterResults($event)"
-                        (keyup)="overlay.results = filterResults($event)"
-                        class="search-input" 
-                        [id]="'employee_search'+i" 
-                        type="text" 
-                        placeholder="Employee name or id">
-                    <app-search-results-overlay
-                        #overlay
-                        (employeeSelected)="onEmployeeSelect($event, i)" 
-                        class="overlay" 
-                    />
-                </div>
-
-                <div class="label-input-wrapper">
-                    <label>Employee Name</label>
-                    <input readonly [value]="row.controls['employee_name'].value" type="text"placeholder="Auto filled on selection">
-                </div>
-
-                <div class="label-input-wrapper">
-                    <label>Employee Id</label>
-                    <input readonly [value]="row.controls['employee_id'].value" type="text"placeholder="Auto filled on selection">
-                </div>
-
-                <div class="label-input-wrapper">
-                    <label [for]="'type_a_amount'+i">Type A amount</label>
-                    <input formControlName="TypeA_Amount" min="0" type="number" [id]="'type_a_amount'+i">
-                </div>
-
-                <div class="label-input-wrapper">
-                    <label [for]="'type_b_amount'+i">Type B amount</label>
-                    <input formControlName="TypeB_Amount" min="0" type="number" [id]="'type_b_amount'+i">
-                </div>
-            </div>
-            @if(row.invalid && row.dirty){
-                <p class="error-message">Employee not selected!</p>
-            }
-        }
-        @if(formArray.controls.length > 0){
+    @if(formArray.controls.length > 0){
+        <form [formGroup]="form">
+            <table>
+                <thead>
+                    <th>Search</th>
+                    <th>Employee Name</th>
+                    <th>Employee Id</th>
+                    <th>Type A Amount</th>
+                    <th>Type B Amount</th>
+                </thead>
+                <tbody>
+                    @for(row of form.controls['employees'].controls;let i = $index; track i){
+                        <tr class="row" [class.odd]="$odd" [formGroup]="row">
+                            <td class="input-overlay-wrapper">
+                                <input
+                                    formControlName="search"
+                                    autocomplete="off"
+                                    [value]="row.controls['search'].value"
+                                    (click)="overlay.results = filterResults($event)"
+                                    (keyup)="overlay.results = filterResults($event)"
+                                    class="search-input" 
+                                    [id]="'employee_search'+i" 
+                                    type="text" 
+                                    placeholder="Employee name or id">
+                                <app-search-results-overlay
+                                    #overlay
+                                    (employeeSelected)="onEmployeeSelect($event, i)" 
+                                    class="overlay" 
+                                /> 
+                            </td>
+                            <td>
+                                <input readonly [value]="row.controls['employee_name'].value" type="text"placeholder="Auto filled on selection">
+                            </td>
+                            <td>
+                                <input readonly [value]="row.controls['employee_id'].value" type="text"placeholder="Auto filled on selection">
+                            </td>
+                            <td>
+                                <input formControlName="TypeA_Amount" min="0" type="number" [id]="'type_a_amount'+i">
+                            </td>
+                            <td>
+                                <input formControlName="TypeB_Amount" min="0" type="number" [id]="'type_b_amount'+i">
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
             <button (click)="submit()" type="submit">Submit</button>
-        }
-    </form>
+        </form>
+    }
 </div>
