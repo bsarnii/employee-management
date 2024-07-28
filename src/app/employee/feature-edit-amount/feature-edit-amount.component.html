@@ -4,7 +4,6 @@
         <form [formGroup]="form">
             <table>
                 <thead>
-                    <th>Search</th>
                     <th>Employee Name</th>
                     <th>Employee Id</th>
                     <th>Type A Amount</th>
@@ -14,27 +13,33 @@
                     @for(row of form.controls['employees'].controls;let i = $index; track i){
                         <tr class="row" [class.odd]="$odd" [formGroup]="row">
                             <td class="input-overlay-wrapper">
-                                <input
-                                    formControlName="search"
+                                <input 
+                                    type="text"
+                                    formControlName="employee_name"
                                     autocomplete="off"
-                                    [value]="row.controls['search'].value"
-                                    (click)="overlay.results = filterResults($event)"
-                                    (keyup)="overlay.results = filterResults($event)"
-                                    class="search-input" 
-                                    [id]="'employee_search'+i" 
-                                    type="text" 
-                                    placeholder="Employee name or id">
+                                    (click)="nameOverlay.results = filterResults($event)"
+                                    (keyup)="nameOverlay.results = filterResults($event)"
+                                    [id]="'employee_name'+i" 
+                                >
                                 <app-search-results-overlay
-                                    #overlay
+                                    #nameOverlay
                                     (employeeSelected)="onEmployeeSelect($event, i)" 
                                     class="overlay" 
                                 /> 
                             </td>
-                            <td>
-                                <input readonly [value]="row.controls['employee_name'].value" type="text"placeholder="Auto filled on selection">
-                            </td>
-                            <td>
-                                <input readonly [value]="row.controls['employee_id'].value" type="text"placeholder="Auto filled on selection">
+                            <td class="input-overlay-wrapper">
+                                <input 
+                                    type="text"
+                                    formControlName="employee_id"
+                                    (click)="idOverlay.results = filterResults($event)"
+                                    (keyup)="idOverlay.results = filterResults($event)"
+                                    [id]="'employee_id'+i" 
+                                >
+                                <app-search-results-overlay
+                                    #idOverlay
+                                    (employeeSelected)="onEmployeeSelect($event, i)" 
+                                    class="overlay" 
+                                /> 
                             </td>
                             <td>
                                 <input formControlName="TypeA_Amount" min="0" type="number" [id]="'type_a_amount'+i">

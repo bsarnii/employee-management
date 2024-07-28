@@ -1,9 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { EditAmountFacade } from '../data-access/edit-amount.facade';
-import { FormArray, FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators, ValueChangeEvent } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SearchResultsOverlayComponent } from "../ui/search-results-overlay/search-results-overlay.component";
 import { Employee } from '../models/employee.model';
+import { employeePairValidator } from '../util/validators/employeePairValidator.util';
 
 @Component({
   selector: 'app-feature-edit-amount',
@@ -23,12 +24,11 @@ export class FeatureEditAmountComponent {
 
   addRow(){
     this.formArray.push(this.fb.group({
-      search: new FormControl(''),
       employee_id: new FormControl('', Validators.required),
       employee_name: new FormControl('', Validators.required), 
       TypeA_Amount: new FormControl(0, Validators.required), 
       TypeB_Amount: new FormControl(0, Validators.required), 
-    }))
+    },{ validators: employeePairValidator(this.facade.mockedEmployeeData()) }))
   }
 
   onEmployeeSelect(employee:Employee, arrayIndex:number){
@@ -50,13 +50,10 @@ export class FeatureEditAmountComponent {
 
   submit(){
     if(this.form.valid){
-      console.log(this.formArray.getRawValue().map(row => {
-        delete row.search;
-        return row
-      }))
+      console.log(this.formArray.getRawValue())
     }else{
       this.formArray.controls.map(control => control.markAsDirty());
-      console.log("Form is invalid!")
+      console.log("Form is invalid!");
     }
 
   }
