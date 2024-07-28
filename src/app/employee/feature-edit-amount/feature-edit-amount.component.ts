@@ -52,7 +52,7 @@ export class FeatureEditAmountComponent {
     if(this.form.valid){
       console.log(this.formArray.getRawValue())
     }else{
-      this.formArray.controls.map(control => control.markAsDirty());
+      this.formArray.markAllAsTouched();
       console.log("Form is invalid!");
     }
 
