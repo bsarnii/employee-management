@@ -26,8 +26,8 @@ export class FeatureEditAmountComponent {
     this.formArray.push(this.fb.group({
       employee_id: new FormControl('', Validators.required),
       employee_name: new FormControl('', Validators.required), 
-      TypeA_Amount: new FormControl(0, Validators.required), 
-      TypeB_Amount: new FormControl(0, Validators.required), 
+      TypeA_Amount: new FormControl(0, [Validators.required, Validators.min(1)]), 
+      TypeB_Amount: new FormControl(0, [Validators.required, Validators.min(1)]), 
     },{ validators: employeePairValidator(this.facade.mockedEmployeeData()) }))
   }
 
@@ -35,7 +35,6 @@ export class FeatureEditAmountComponent {
     const arrayItemGroup = this.formArray.controls[arrayIndex];
     arrayItemGroup.get('employee_id')?.setValue(employee.id);
     arrayItemGroup.get('employee_name')?.setValue(employee.name);
-    arrayItemGroup.get('search')?.setValue(employee.name);
   }
 
   filterResults(event:Event){
@@ -45,6 +44,36 @@ export class FeatureEditAmountComponent {
       !selectedIds.some(id => id === employee.id) && (employee.name.toLowerCase().includes(value.toLowerCase()) || employee.id.includes(value))
     )
     return filteredEmployees;
+  }
+
+  onTypeAChange(arrayIndex:number){
+    const arrayItemGroup = this.formArray.controls[arrayIndex];
+    const typeAControl = arrayItemGroup.get('TypeA_Amount');
+    const typeBControl = arrayItemGroup.get('TypeB_Amount');
+    if(typeAControl?.value === null){
+      typeAControl.setValue(0);
+    }
+    if(typeAControl?.value !== 0) {
+      typeBControl?.disable()
+    }
+    if(typeAControl?.value === 0) {
+      typeBControl?.enable()
+    }
+  }
+
+  onTypeBChange(arrayIndex:number){
+    const arrayItemGroup = this.formArray.controls[arrayIndex];
+    const typeAControl = arrayItemGroup.get('TypeA_Amount');
+    const typeBControl = arrayItemGroup.get('TypeB_Amount');
+    if(typeBControl?.value === null){
+      typeBControl.setValue(0);
+    }
+    if(typeBControl?.value !== 0) {
+      typeAControl?.disable()
+    }
+    if(typeBControl?.value === 0) {
+      typeAControl?.enable()
+    }
   }
 
 

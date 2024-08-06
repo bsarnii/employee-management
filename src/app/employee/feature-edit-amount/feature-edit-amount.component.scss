@@ -1,8 +1,8 @@
 :host{
     margin-top: 50px;
     width: 100%;
+    padding: 0 100px;
     display: flex;
-    justify-content: center;
 }
 .wrapper{
     display: flex;
@@ -33,10 +33,26 @@ table{
         }
         td{
             padding: 4px;
+            &:has([disabled]){
+                opacity: .5;
+            }
+        }
+        .td-error{
+            color: rgb(121, 0, 0);
+            font-weight: bold;
+            display: table-cell;
+            font-size: 14px;
+        }
+        &:focus-within{
+            .td-error{
+                display: none;
+            }
         }
         &.ng-touched.ng-invalid{
-            background: #efd2d2;
-            transition: background .5s;
+            &:not(:focus-within){
+                background: #efd2d2;
+                transition: background .5s;
+            }
         }
     }
 }

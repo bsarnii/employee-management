@@ -13,7 +13,7 @@
                     @for(row of form.controls['employees'].controls;let i = $index; track i){
                         <tr class="row" [class.odd]="$odd" [formGroup]="row">
                             <td class="input-overlay-wrapper">
-                                <input 
+                                <input
                                     type="text"
                                     formControlName="employee_name"
                                     autocomplete="off"
@@ -23,7 +23,7 @@
                                 >
                                 <app-search-results-overlay
                                     #nameOverlay
-                                    (employeeSelected)="onEmployeeSelect($event, i)" 
+                                    (employeeSelected)="onEmployeeSelect($event, i); typeAInput.focus()" 
                                     class="overlay" 
                                 /> 
                             </td>
@@ -31,22 +31,34 @@
                                 <input 
                                     type="text"
                                     formControlName="employee_id"
+                                    autocomplete="off"
                                     (click)="idOverlay.results = filterResults($event)"
                                     (keyup)="idOverlay.results = filterResults($event)"
                                     [id]="'employee_id'+i" 
                                 >
                                 <app-search-results-overlay
                                     #idOverlay
-                                    (employeeSelected)="onEmployeeSelect($event, i)" 
+                                    (employeeSelected)="onEmployeeSelect($event, i); typeAInput.focus()" 
                                     class="overlay" 
                                 /> 
                             </td>
                             <td>
-                                <input formControlName="TypeA_Amount" min="0" type="number" [id]="'type_a_amount'+i">
+                                <input #typeAInput (change)="onTypeAChange(i)" formControlName="TypeA_Amount" min="0" type="number" [id]="'type_a_amount'+i">
                             </td>
                             <td>
-                                <input formControlName="TypeB_Amount" min="0" type="number" [id]="'type_b_amount'+i">
+                                <input (change)="onTypeBChange(i)" formControlName="TypeB_Amount" min="0" type="number" [id]="'type_b_amount'+i">
                             </td>
+                                @if(row.invalid && row.touched){
+                                    <td class="td-error">
+                                        @if(row.hasError('invalidEmployeePair')){
+                                            <p>Employee name and id do not match!</p>
+                                        }
+                                        @if(row.controls['TypeA_Amount'].hasError('min') || row.controls['TypeB_Amount'].hasError('min')){
+                                            <p>TypeA_Amount or TypeB_Amount need to be greater than 0!</p>
+                                        }
+                                        
+                                    </td>
+                                }
                         </tr>
                     }
                 </tbody>
