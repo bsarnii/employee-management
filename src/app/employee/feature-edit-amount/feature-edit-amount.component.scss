@@ -24,6 +24,7 @@ table{
         color: #fff;
         th{
             padding: 4px;
+            font-weight: 500;
         }
     }
     tr{
@@ -39,7 +40,7 @@ table{
         }
         .td-error{
             color: rgb(121, 0, 0);
-            font-weight: bold;
+            font-weight: 500;
             display: table-cell;
             font-size: 14px;
         }
