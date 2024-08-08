@@ -5,11 +5,16 @@ import { CommonModule } from '@angular/common';
 import { SearchResultsOverlayComponent } from "../ui/search-results-overlay/search-results-overlay.component";
 import { Employee } from '../models/employee.model';
 import { employeePairValidator } from '../util/validators/employeePairValidator.util';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-feature-edit-amount',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SearchResultsOverlayComponent],
+  imports: [CommonModule, ReactiveFormsModule, SearchResultsOverlayComponent, MatDatepickerModule, MatFormFieldModule,MatInputModule],
+  providers: [provideNativeDateAdapter()],
   templateUrl: './feature-edit-amount.component.html',
   styleUrl: './feature-edit-amount.component.scss'
 })
@@ -18,6 +23,7 @@ export class FeatureEditAmountComponent {
   fb = inject(NonNullableFormBuilder);
 
   form = this.fb.group({
+    date: this.fb.control(null,[Validators.required]),
     employees: this.fb.array<FormGroup>([])
   });
   formArray = this.form.get('employees') as FormArray;
@@ -79,7 +85,7 @@ export class FeatureEditAmountComponent {
 
   submit(){
     if(this.form.valid){
-      console.log(this.formArray.getRawValue())
+      console.log(this.form.getRawValue())
     }else{
       this.formArray.markAllAsTouched();
       console.log("Form is invalid!");

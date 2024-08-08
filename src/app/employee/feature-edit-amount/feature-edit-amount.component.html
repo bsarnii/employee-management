@@ -1,7 +1,12 @@
 <div class="wrapper">
-    <button (click)="addRow()" class="button-add">+ Add Row</button>
-    @if(formArray.controls.length > 0){
-        <form [formGroup]="form">
+    <form [formGroup]="form">
+        <mat-form-field>
+            <mat-label>Choose a date</mat-label>
+            <input matInput formControlName='date' [matDatepicker]="datePicker">
+            <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
+            <mat-datepicker #datePicker></mat-datepicker>
+        </mat-form-field>
+        @if(formArray.controls.length > 0){
             <table>
                 <thead>
                     <th>Employee Name</th>
@@ -63,7 +68,8 @@
                     }
                 </tbody>
             </table>
-            <button (click)="submit()" type="submit">Submit</button>
-        </form>
-    }
+        }
+        <button (click)="addRow()" class="button-add">+ Add Row</button>
+        <button (click)="submit()" type="submit">Submit</button>
+    </form>
 </div>
