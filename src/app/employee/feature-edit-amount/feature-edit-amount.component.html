@@ -1,75 +1,98 @@
-<div class="wrapper">
-    <form [formGroup]="form">
-        <mat-form-field>
-            <mat-label>Choose a date</mat-label>
-            <input matInput formControlName='date' [matDatepicker]="datePicker">
-            <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
-            <mat-datepicker #datePicker></mat-datepicker>
-        </mat-form-field>
-        @if(formArray.controls.length > 0){
-            <table>
-                <thead>
-                    <th>Employee Name</th>
-                    <th>Employee Id</th>
-                    <th>Type A Amount</th>
-                    <th>Type B Amount</th>
-                </thead>
-                <tbody>
-                    @for(row of form.controls['employees'].controls;let i = $index; track i){
-                        <tr class="row" [class.odd]="$odd" [formGroup]="row">
-                            <td class="input-overlay-wrapper">
-                                <input
-                                    type="text"
-                                    formControlName="employee_name"
-                                    autocomplete="off"
-                                    (click)="nameOverlay.results = filterResults($event)"
-                                    (keyup)="nameOverlay.results = filterResults($event)"
-                                    [id]="'employee_name'+i" 
-                                >
-                                <app-search-results-overlay
-                                    #nameOverlay
-                                    (employeeSelected)="onEmployeeSelect($event, i); typeAInput.focus()" 
-                                    class="overlay" 
-                                /> 
-                            </td>
-                            <td class="input-overlay-wrapper">
-                                <input 
-                                    type="text"
-                                    formControlName="employee_id"
-                                    autocomplete="off"
-                                    (click)="idOverlay.results = filterResults($event)"
-                                    (keyup)="idOverlay.results = filterResults($event)"
-                                    [id]="'employee_id'+i" 
-                                >
-                                <app-search-results-overlay
-                                    #idOverlay
-                                    (employeeSelected)="onEmployeeSelect($event, i); typeAInput.focus()" 
-                                    class="overlay" 
-                                /> 
-                            </td>
+@if({
+    typeA_total: typeA_total$ | async,
+    typeB_total: typeB_total$ | async,
+    amountDifference: amountDifference$ | async
+}; as vm){
+    <div class="wrapper">
+        <form [formGroup]="form">
+            <mat-form-field>
+                <mat-label>Choose a date</mat-label>
+                <input matInput formControlName='date' [matDatepicker]="datePicker">
+                <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
+                <mat-datepicker #datePicker></mat-datepicker>
+            </mat-form-field>
+            @if(formArray.controls.length > 0){
+                <table>
+                    <thead>
+                        <th>Employee Name</th>
+                        <th>Employee Id</th>
+                        <th>Type A Amount</th>
+                        <th>Type B Amount</th>
+                    </thead>
+                    <tbody>
+                        @for(row of form.controls['employees'].controls;let i = $index; track i){
+                            <tr class="row" [class.odd]="$odd" [formGroup]="row">
+                                <td class="input-overlay-wrapper">
+                                    <input
+                                        type="text"
+                                        formControlName="employee_name"
+                                        autocomplete="off"
+                                        (click)="nameOverlay.results = filterResults($event)"
+                                        (keyup)="nameOverlay.results = filterResults($event)"
+                                        [id]="'employee_name'+i" 
+                                    >
+                                    <app-search-results-overlay
+                                        #nameOverlay
+                                        (employeeSelected)="onEmployeeSelect($event, i); typeAInput.focus()" 
+                                        class="overlay" 
+                                    /> 
+                                </td>
+                                <td class="input-overlay-wrapper">
+                                    <input 
+                                        type="text"
+                                        formControlName="employee_id"
+                                        autocomplete="off"
+                                        (click)="idOverlay.results = filterResults($event)"
+                                        (keyup)="idOverlay.results = filterResults($event)"
+                                        [id]="'employee_id'+i" 
+                                    >
+                                    <app-search-results-overlay
+                                        #idOverlay
+                                        (employeeSelected)="onEmployeeSelect($event, i); typeAInput.focus()" 
+                                        class="overlay" 
+                                    /> 
+                                </td>
+                                <td>
+                                    <input #typeAInput (change)="onTypeAChange(i)" formControlName="TypeA_Amount" min="0" type="number" [id]="'type_a_amount'+i">
+                                </td>
+                                <td>
+                                    <input (change)="onTypeBChange(i)" formControlName="TypeB_Amount" min="0" type="number" [id]="'type_b_amount'+i">
+                                </td>
+                                    @if(row.invalid && row.touched){
+                                        <td class="td-error">
+                                            @if(row.hasError('invalidEmployeePair')){
+                                                <p>Employee name and id do not match!</p>
+                                            }
+                                            @if(row.controls['TypeA_Amount'].hasError('min') || row.controls['TypeB_Amount'].hasError('min')){
+                                                <p>TypeA_Amount or TypeB_Amount need to be greater than 0!</p>
+                                            }
+                                            
+                                        </td>
+                                    }
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr style="background-color: transparent;">
+                            <td></td>
+                            <td></td>
                             <td>
-                                <input #typeAInput (change)="onTypeAChange(i)" formControlName="TypeA_Amount" min="0" type="number" [id]="'type_a_amount'+i">
-                            </td>
-                            <td>
-                                <input (change)="onTypeBChange(i)" formControlName="TypeB_Amount" min="0" type="number" [id]="'type_b_amount'+i">
-                            </td>
-                                @if(row.invalid && row.touched){
-                                    <td class="td-error">
-                                        @if(row.hasError('invalidEmployeePair')){
-                                            <p>Employee name and id do not match!</p>
-                                        }
-                                        @if(row.controls['TypeA_Amount'].hasError('min') || row.controls['TypeB_Amount'].hasError('min')){
-                                            <p>TypeA_Amount or TypeB_Amount need to be greater than 0!</p>
-                                        }
-                                        
-                                    </td>
+                                @if(vm.typeB_total > vm.typeA_total){
+                                    Leftover: {{vm.amountDifference}}
                                 }
+                            </td>
+                            <td>
+                                @if(vm.typeA_total > vm.typeB_total){
+                                    Leftover: {{vm.amountDifference}}
+                                }
+                            </td>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        }
-        <button (click)="addRow()" class="button-add">+ Add Row</button>
-        <button (click)="submit()" type="submit">Submit</button>
-    </form>
-</div>
+                    </tfoot>
+                </table>
+            }
+            <button (click)="addRow()" class="button-add">+ Add Row</button>
+            <button (click)="submit()" type="submit">Submit</button>
+        </form>
+    </div>
+}
+

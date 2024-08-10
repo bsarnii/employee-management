@@ -9,6 +9,19 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
+import { combineLatest, map, startWith } from 'rxjs';
+
+interface FormResult{
+  date: string
+  employees: FormRowResult[]
+}
+
+interface FormRowResult{
+  employee_name: string
+  employee_id: string
+  TypeA_Amount: number
+  TypeB_Amount: number
+}
 
 @Component({
   selector: 'app-feature-edit-amount',
@@ -81,6 +94,34 @@ export class FeatureEditAmountComponent {
       typeAControl?.enable()
     }
   }
+
+  typeA_total$ = this.formArray.valueChanges.pipe(
+    map(rows => rows.reduce((sum:number, row:FormRowResult) => {
+      return sum + (row['TypeA_Amount'] ? row['TypeA_Amount'] : 0)
+    }, 0 )),
+    startWith(0)
+  )
+
+  typeB_total$ = this.formArray.valueChanges.pipe(
+    map(rows => rows.reduce((sum:number, row:FormRowResult) => {
+      return sum + (row['TypeB_Amount'] ? row['TypeB_Amount'] : 0)
+    }, 0 )),
+    startWith(0)
+  )
+
+  amountDifference$ = combineLatest([this.typeA_total$,this.typeB_total$]).pipe(
+    map(([typeA,typeB])=> {
+      const typeASubstraction = typeA - typeB;
+      const typeBSubstraction = typeB - typeA;
+      if(typeASubstraction > 0){
+        return typeASubstraction
+      }
+      if(typeBSubstraction > 0) {
+        return typeBSubstraction
+      }
+      return 0
+    })
+  )
 
 
   submit(){
