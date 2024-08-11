@@ -48,12 +48,19 @@ table{
             font-size: 14px;
         }
         &:focus-within{
-            .td-error{
-                display: none;
+            &:not(:has(button:focus)){
+                .td-error{
+                    display: none;
+                }
             }
+
         }
         &.ng-touched.ng-invalid{
             &:not(:focus-within){
+                background: #efd2d2;
+                transition: background .5s;
+            }
+            &:has(button:focus){
                 background: #efd2d2;
                 transition: background .5s;
             }

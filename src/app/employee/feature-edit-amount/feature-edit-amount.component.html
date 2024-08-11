@@ -58,17 +58,18 @@
                                 <td>
                                     <input (change)="onTypeBChange(i)" formControlName="TypeB_Amount" min="0" type="number" [id]="'type_b_amount'+i">
                                 </td>
-                                    @if(row.invalid && row.touched){
-                                        <td class="td-error">
-                                            @if(row.hasError('invalidEmployeePair')){
-                                                <p>Employee name and id do not match!</p>
-                                            }
-                                            @if(row.controls['TypeA_Amount'].hasError('min') || row.controls['TypeB_Amount'].hasError('min')){
-                                                <p>TypeA_Amount or TypeB_Amount need to be greater than 0!</p>
-                                            }
-                                            
-                                        </td>
-                                    }
+                                @if(row.invalid && row.touched){
+                                    <td class="td-error">
+                                        @if(row.hasError('invalidEmployeePair')){
+                                            <p>Employee name and id do not match!</p>
+                                        }
+                                        @if(row.controls['TypeA_Amount'].hasError('min') || row.controls['TypeB_Amount'].hasError('min')){
+                                            <p>TypeA_Amount or TypeB_Amount need to be greater than 0!</p>
+                                        }
+                                        
+                                    </td>
+                                }
+                                <td style="background: #fff;"><button (click)="formArray.removeAt(i)">Clear row</button></td>
                             </tr>
                         }
                     </tbody>
