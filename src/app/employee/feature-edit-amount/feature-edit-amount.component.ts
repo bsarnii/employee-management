@@ -43,8 +43,8 @@ export class FeatureEditAmountComponent {
     this.formArray.push(this.fb.group({
       employee_id: new FormControl('', Validators.required),
       employee_name: new FormControl('', Validators.required), 
-      TypeA_Amount: new FormControl(0, [Validators.required, Validators.min(1)]), 
-      TypeB_Amount: new FormControl(0, [Validators.required, Validators.min(1)]), 
+      TypeA_Amount: new FormControl(null, [Validators.required, Validators.min(1)]), 
+      TypeB_Amount: new FormControl(null, [Validators.required, Validators.min(1)]), 
     },{ validators: employeePairValidator(this.facade.mockedEmployeeData()) }))
   }
 
@@ -54,14 +54,6 @@ export class FeatureEditAmountComponent {
     arrayItemGroup.get('employee_name')?.setValue(employee.name);
   }
 
-  filterResults(event:Event){
-    const value = (event.target as HTMLInputElement).value;
-    const selectedIds = this.formArray.getRawValue().map(group => group.employee_id);
-    const filteredEmployees = this.facade.mockedEmployeeData().filter((employee:Employee) =>
-      !selectedIds.some(id => id === employee.id) && (employee.name.toLowerCase().includes(value.toLowerCase()) || employee.id.includes(value))
-    )
-    return filteredEmployees;
-  }
 
   onTypeAChange(arrayIndex:number){
     const arrayItemGroup = this.formArray.controls[arrayIndex];
@@ -71,6 +63,7 @@ export class FeatureEditAmountComponent {
       typeAControl.setValue(0);
     }
     if(typeAControl?.value !== 0) {
+      typeBControl?.setValue(0)
       typeBControl?.disable()
     }
     if(typeAControl?.value === 0) {
@@ -86,12 +79,21 @@ export class FeatureEditAmountComponent {
       typeBControl.setValue(0);
     }
     if(typeBControl?.value !== 0) {
+      typeAControl?.setValue(0)
       typeAControl?.disable()
     }
     if(typeBControl?.value === 0) {
       typeAControl?.enable()
     }
   }
+
+  filteredResults$ = this.formArray.valueChanges.pipe(map((arrayValues:FormRowResult[]) => {
+    const selectedIds = arrayValues.map(row => row.employee_id);
+    const filteredEmployees = this.facade.mockedEmployeeData().filter((employee:Employee) =>
+      !selectedIds.includes(employee.id)
+    )
+    return filteredEmployees;
+  }))
 
   typeA_total$ = this.formArray.valueChanges.pipe(
     map(rows => rows.reduce((sum:number, row:FormRowResult) => {

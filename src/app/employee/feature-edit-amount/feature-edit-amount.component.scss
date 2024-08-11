@@ -48,7 +48,7 @@ table{
             font-size: 14px;
         }
         &:focus-within{
-            &:not(:has(button:focus)){
+            &:not(:has(.delete-btn:focus)){
                 .td-error{
                     display: none;
                 }
@@ -60,7 +60,7 @@ table{
                 background: #efd2d2;
                 transition: background .5s;
             }
-            &:has(button:focus){
+            &:has(.delete-btn:focus){
                 background: #efd2d2;
                 transition: background .5s;
             }

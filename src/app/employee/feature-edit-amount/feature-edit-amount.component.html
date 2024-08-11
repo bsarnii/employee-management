@@ -1,7 +1,8 @@
 @if({
     typeA_total: typeA_total$ | async,
     typeB_total: typeB_total$ | async,
-    amountDifference: amountDifference$ | async
+    amountDifference: amountDifference$ | async,
+    filteredResults: filteredResults$ | async
 }; as vm){
     <div class="wrapper">
         <form [formGroup]="form">
@@ -11,7 +12,7 @@
                 <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
                 <mat-datepicker #datePicker></mat-datepicker>
             </mat-form-field>
-            @if(formArray.controls.length > 0){
+            @if(formArray.controls.length > 0 && vm.filteredResults){
                 <table>
                     <thead>
                         <th>Employee Name</th>
@@ -27,12 +28,11 @@
                                         type="text"
                                         formControlName="employee_name"
                                         autocomplete="off"
-                                        (click)="nameOverlay.results = filterResults($event)"
-                                        (keyup)="nameOverlay.results = filterResults($event)"
                                         [id]="'employee_name'+i" 
                                     >
                                     <app-search-results-overlay
                                         #nameOverlay
+                                        [results]="vm.filteredResults"
                                         (employeeSelected)="onEmployeeSelect($event, i); typeAInput.focus()" 
                                         class="overlay" 
                                     /> 
@@ -42,12 +42,11 @@
                                         type="text"
                                         formControlName="employee_id"
                                         autocomplete="off"
-                                        (click)="idOverlay.results = filterResults($event)"
-                                        (keyup)="idOverlay.results = filterResults($event)"
                                         [id]="'employee_id'+i" 
                                     >
                                     <app-search-results-overlay
                                         #idOverlay
+                                        [results]="vm.filteredResults"
                                         (employeeSelected)="onEmployeeSelect($event, i); typeAInput.focus()" 
                                         class="overlay" 
                                     /> 
@@ -66,10 +65,13 @@
                                         @if(row.controls['TypeA_Amount'].hasError('min') || row.controls['TypeB_Amount'].hasError('min')){
                                             <p>TypeA_Amount or TypeB_Amount need to be greater than 0!</p>
                                         }
+                                        @if(row.controls['TypeA_Amount'].hasError('required') || row.controls['TypeB_Amount'].hasError('required')){
+                                            <p>TypeA_Amount or TypeB_Amount is required!</p>
+                                        }
                                         
                                     </td>
                                 }
-                                <td style="background: #fff;"><button (click)="formArray.removeAt(i)">Delete row</button></td>
+                                <td style="background: #fff;"><button class="delete-btn" (click)="formArray.removeAt(i)">Delete row</button></td>
                             </tr>
                         }
                     </tbody>
