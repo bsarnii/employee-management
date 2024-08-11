@@ -32,6 +32,9 @@ table{
         &.odd{
             background: #eaeff7;
         }
+        &.footer-row{
+            background: transparent;
+        }
         td{
             padding: 4px;
             &:has([disabled]){

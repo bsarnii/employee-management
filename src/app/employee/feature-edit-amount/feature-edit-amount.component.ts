@@ -9,7 +9,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
-import { combineLatest, map, startWith } from 'rxjs';
+import { combineLatest, map, startWith, tap } from 'rxjs';
 
 interface FormResult{
   date: string
@@ -37,7 +37,8 @@ export class FeatureEditAmountComponent {
 
   form = this.fb.group({
     date: this.fb.control(null,[Validators.required]),
-    employees: this.fb.array<FormGroup>([])
+    employees: this.fb.array<FormGroup>([]),
+    amountDifference: this.fb.control(0,[Validators.max(0)])
   });
   formArray = this.form.get('employees') as FormArray;
 
@@ -120,8 +121,10 @@ export class FeatureEditAmountComponent {
         return typeBSubstraction
       }
       return 0
-    })
-  )
+    }),tap((difference) => this.form.controls.amountDifference.setValue(difference))
+  );
+
+
 
 
   submit(){
@@ -129,6 +132,8 @@ export class FeatureEditAmountComponent {
       console.log(this.form.getRawValue())
     }else{
       this.formArray.markAllAsTouched();
+      this.form.controls.amountDifference.markAsTouched();
+      console.log(this.form.controls.amountDifference)
       console.log("Form is invalid!");
     }
 

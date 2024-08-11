@@ -72,22 +72,37 @@
                             </tr>
                         }
                     </tbody>
-                    <tfoot>
-                        <tr style="background-color: transparent;">
-                            <td></td>
-                            <td></td>
-                            <td>
-                                @if(vm.typeB_total > vm.typeA_total){
-                                    Leftover: {{vm.amountDifference}}
+                    @if(form.controls.amountDifference; as difference){
+                        <tfoot>
+                            <tr 
+                            class="footer-row"
+                            [ngClass]="
+                            {
+                                'ng-invalid': difference.invalid && difference.touched,
+                                'ng-touched': difference.invalid && difference.touched
+                            }"
+                            >
+                                <td style="background: #fff"></td>
+                                <td style="background: #fff"></td>
+                                <td>
+                                    @if(vm.typeB_total > vm.typeA_total){
+                                        Leftover: {{vm.amountDifference}}
+                                    }
+                                </td>
+                                <td>
+                                    @if(vm.typeA_total > vm.typeB_total){
+                                        Leftover: {{vm.amountDifference}}
+                                    }
+                                </td>
+                                @if(difference.invalid && difference.touched){
+                                    <td class="td-error">
+                                        <p>You need to balance out the values!</p>
+                                    </td>
                                 }
-                            </td>
-                            <td>
-                                @if(vm.typeA_total > vm.typeB_total){
-                                    Leftover: {{vm.amountDifference}}
-                                }
-                            </td>
-                        </tr>
-                    </tfoot>
+                            </tr>
+                        </tfoot>
+                    }
+
                 </table>
             }
             <button (click)="addRow()" class="button-add">+ Add Row</button>
