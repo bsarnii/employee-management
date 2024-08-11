@@ -10,11 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { combineLatest, map, startWith, tap } from 'rxjs';
-
-interface FormResult{
-  date: string
-  employees: FormRowResult[]
-}
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface FormRowResult{
   employee_name: string
@@ -26,7 +22,7 @@ interface FormRowResult{
 @Component({
   selector: 'app-feature-edit-amount',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SearchResultsOverlayComponent, MatDatepickerModule, MatFormFieldModule,MatInputModule],
+  imports: [CommonModule, ReactiveFormsModule, SearchResultsOverlayComponent, MatDatepickerModule, MatFormFieldModule, MatInputModule],
   providers: [provideNativeDateAdapter()],
   templateUrl: './feature-edit-amount.component.html',
   styleUrl: './feature-edit-amount.component.scss'
@@ -34,6 +30,7 @@ interface FormRowResult{
 export class FeatureEditAmountComponent {
   facade = inject(EditAmountFacade);
   fb = inject(NonNullableFormBuilder);
+  snackbar = inject(MatSnackBar);
 
   form = this.fb.group({
     date: this.fb.control(null,[Validators.required]),
@@ -131,10 +128,10 @@ export class FeatureEditAmountComponent {
     this.deleteUnusedRows();
     if(this.form.valid){
       console.log(this.form.getRawValue())
+      this.snackbar.open('Form successfully submitted!','OK')
     }else{
       this.formArray.markAllAsTouched();
       this.form.controls.amountDifference.markAsTouched();
-      console.log(this.form.controls.amountDifference)
       console.log("Form is invalid!");
     }
   }
