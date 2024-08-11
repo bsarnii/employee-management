@@ -32,7 +32,7 @@
                                     >
                                     <app-search-results-overlay
                                         #nameOverlay
-                                        [results]="vm.filteredResults"
+                                        [results]="vm.filteredResults | searchEmployees:row.controls['employee_name'].value"
                                         (employeeSelected)="onEmployeeSelect($event, i); typeAInput.focus()" 
                                         class="overlay" 
                                     /> 
@@ -46,7 +46,7 @@
                                     >
                                     <app-search-results-overlay
                                         #idOverlay
-                                        [results]="vm.filteredResults"
+                                        [results]="vm.filteredResults | searchEmployees:row.controls['employee_id'].value"
                                         (employeeSelected)="onEmployeeSelect($event, i); typeAInput.focus()" 
                                         class="overlay" 
                                     /> 

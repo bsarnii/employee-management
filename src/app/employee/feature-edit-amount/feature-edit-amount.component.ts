@@ -11,6 +11,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { combineLatest, map, startWith, tap } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { SearchEmployeesPipe } from '../util/pipes/search-employees.pipe';
 
 interface FormRowResult{
   employee_name: string
@@ -22,7 +23,7 @@ interface FormRowResult{
 @Component({
   selector: 'app-feature-edit-amount',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SearchResultsOverlayComponent, MatDatepickerModule, MatFormFieldModule, MatInputModule],
+  imports: [CommonModule, ReactiveFormsModule, SearchResultsOverlayComponent, MatDatepickerModule, MatFormFieldModule, MatInputModule, SearchEmployeesPipe],
   providers: [provideNativeDateAdapter()],
   templateUrl: './feature-edit-amount.component.html',
   styleUrl: './feature-edit-amount.component.scss'
