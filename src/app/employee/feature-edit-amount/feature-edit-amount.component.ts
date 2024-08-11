@@ -128,6 +128,7 @@ export class FeatureEditAmountComponent {
 
 
   submit(){
+    this.deleteUnusedRows();
     if(this.form.valid){
       console.log(this.form.getRawValue())
     }else{
@@ -136,7 +137,15 @@ export class FeatureEditAmountComponent {
       console.log(this.form.controls.amountDifference)
       console.log("Form is invalid!");
     }
+  }
 
+  deleteUnusedRows(){
+    const formArrayValues:FormRowResult[] = this.formArray.value;
+    for (let i = this.formArray.length - 1; i >= 0; i--) {
+      if(!formArrayValues[i].employee_name && !formArrayValues[i].employee_id && !formArrayValues[i].TypeA_Amount && !formArrayValues[i].TypeB_Amount) {
+        this.formArray.removeAt(i);
+      }
+    }
   }
 
 }
